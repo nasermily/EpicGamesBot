@@ -1,5 +1,6 @@
 import os
 import discord
+from discord.ext import tasks
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options
 
@@ -24,14 +25,18 @@ def getGames():
   options.add_argument('--disable-dev-shm-usage')
   driver = webdriver.Chrome(options=options)
   driver.get(urlHome)
-  elements = driver.find_elements_by_class_name("css-53yrcz-CardGridDesktopLandscape__cardWrapperDesktop");
+  elements = driver.find_elements_by_tag_name('a')
   for game in elements:
-    label = game.find_element_by_xpath('.//*[@data-testid="offer-title-info-title"]').text
-    link = game.find_element_by_tag_name('a').get_attribute('href')
-    thumbnail = game.find_element_by_tag_name('img').get_attribute('src')
-    dateAndTime = game.find_element_by_xpath('.//*[@data-testid="offer-title-info-subtitle"]').text.split('at')
-    dateRange = dateAndTime[0]
-    embeds.append(createEmbed(label, link, thumbnail, dateRange))
+    try:
+      if(game.get_attribute("aria-label").startswith("Free Game")):
+        label = game.find_element_by_xpath('.//*[@data-testid="offer-title-info-title"]').text
+        link = game.get_attribute('href')
+        thumbnail = game.find_element_by_tag_name('img').get_attribute('src')
+        dateAndTime = game.find_element_by_xpath('.//*[@data-testid="offer-title-info-subtitle"]').text.split('at')
+        dateRange = dateAndTime[0]
+        embeds.append(createEmbed(label, link, thumbnail, dateRange))
+    except Exception:
+      pass
     
   return embeds
 
