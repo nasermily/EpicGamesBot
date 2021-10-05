@@ -6,6 +6,7 @@ import linecache
 
 CHANNEL_ID_LINE_NUM = 1
 EPIC_GAMES_LINE_NUM = 2
+LEAGUE_SKINS_LINE_NUM = 3
 
 EPIC_GAMES_ROLE = "EpicGames"
 LEAGUE_ROLE = "LeagueSkins"
@@ -17,6 +18,7 @@ HELP_MESSAGE = "help message"
 Grabs stored data in case of any bot downtime. Data is simply stored in a text file currently. Each line represents the following:
 1: Channel ID
 2: Epic Games next free game date/time
+3: League Skins next free date/time
 
 :return: Data at the specific line num
 """
@@ -27,6 +29,7 @@ def grab_file_data(line_num):
 Writes data to text file line in case of any downtime. Each line represents the following:
 1: Channel ID
 2: Epic Games next free game date/time
+3: League Skins next free date/time
 """
 def edit_file_data(data, line_num):
   with open("./data.txt", 'r') as file:
@@ -56,7 +59,7 @@ Initializes the selenium webdriver for chrome with headless settings
 """
 def init_driver():
   options = Options()
-  options.headless = True
+  options.headless = False
   options.add_argument('--no-sandbox')
   options.add_argument('--disable-dev-shm-usage')
   return webdriver.Chrome(options=options)

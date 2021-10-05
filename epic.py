@@ -4,14 +4,13 @@ import datetime
 EPIC_URL = "https://www.epicgames.com/store/en-US/free-games"
 GREEN = 0x3d9c3d
 RED = 0x822c2c
-Next_Game_Time = None
 
 
 """
 Returns the next Epic Games date from the data.txt file.
 :return: Datetime for next Epic Games release
 """
-def grab_epic_file_data():
+def get_epic_file_data():
   return datetime.date.fromisoformat(utils.grab_file_data(utils.EPIC_GAMES_LINE_NUM).strip('\n'))
 
 """
@@ -21,7 +20,7 @@ Scrapes Epic Games for the free games available. Grabs all link elements on the 
 def get_games():
   embeds = []
   driver = utils.init_driver()
-  next_game_time = grab_epic_file_data()
+  next_game_time = get_epic_file_data()
 
   driver.get(EPIC_URL)
   elements = driver.find_elements_by_tag_name('a')
@@ -45,7 +44,7 @@ def get_games():
             
         embeds.append(utils.create_embed(label, link, thumbnail, date_range, color))
     except AttributeError:
-      #print("No label found for: ", game.get_attribute('href'))
-      pass
+      print("No label found for: ", game.get_attribute('href'))
     
   return embeds
+

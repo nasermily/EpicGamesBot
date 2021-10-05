@@ -1,9 +1,10 @@
 import os
 import discord
-import datetime
 from discord.ext import tasks
+import datetime
 import utils
 import epic
+import league
 
 BOT_TOKEN = os.environ['botToken']
 Client = discord.Client()
@@ -64,14 +65,18 @@ Looping task to check everyday if new games have been released
 """
 @tasks.loop(minutes=1)
 async def daily_check():
+  """
   if datetime.datetime.now().date() >= epic.grab_epic_file_data():
     embeds = epic.get_games()
     await get_message_channel().send("@" + utils.EPIC_GAMES_ROLE)
     for embed in embeds:
       await get_message_channel().send(embed=embed)
+  """
+  league.get_skins()
     
 def main():
     Client.run(BOT_TOKEN)
 
 if __name__ == "__main__":
     main()
+
